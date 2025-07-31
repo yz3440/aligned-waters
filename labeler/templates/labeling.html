@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sea Horizon Labeling Tool</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .stats {
+        display: flex;
+        justify-content: space-around;
+        padding: 15px;
+        background: #f8f9fa;
+        border-bottom: 1px solid #dee2e6;
+      }
+
+      .stat-item {
+        text-align: center;
+      }
+
+      .stat-number {
+        font-size: 24px;
+        font-weight: bold;
+        color: #667eea;
+      }
+
+      .stat-label {
+        font-size: 12px;
+        color: #6c757d;
+        text-transform: uppercase;
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: #e9ecef;
+        border-radius: 4px;
+        overflow: hidden;
+        margin-top: 10px;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        transition: width 0.3s ease;
+      }
+
+      .image-container {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 500px;
+        padding: 20px;
+        background: #f8f9fa;
+      }
+
+      .image-wrapper {
+        position: relative;
+        display: inline-block;
+        cursor: crosshair;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .image-wrapper:hover {
+        border-color: #667eea;
+      }
+
+      .image {
+        max-width: 100%;
+        max-height: 70vh;
+        display: block;
+      }
+
+      .horizon-line {
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #ff4757;
+        pointer-events: none;
+        z-index: 10;
+      }
+
+      .horizon-marker {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: #ff4757;
+        border: 2px solid white;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        z-index: 11;
+      }
+
+      .controls {
+        padding: 20px;
+        text-align: center;
+        background: white;
+      }
+
+      .btn {
+        padding: 12px 24px;
+        margin: 0 10px;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .btn-primary {
+        background: #667eea;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: #5a6fd8;
+        transform: translateY(-1px);
+      }
+
+      .btn-secondary {
+        background: #6c757d;
+        color: white;
+      }
+
+      .btn-secondary:hover {
+        background: #5a6268;
+        transform: translateY(-1px);
+      }
+
+      .btn-danger {
+        background: #dc3545;
+        color: white;
+      }
+
+      .btn-danger:hover {
+        background: #c82333;
+        transform: translateY(-1px);
+      }
+
+      .btn-warning {
+        background: #ffc107;
+        color: #212529;
+      }
+
+      .btn-warning:hover {
+        background: #e0a800;
+        transform: translateY(-1px);
+      }
+
+      .info-panel {
+        padding: 15px;
+        background: #e3f2fd;
+        border-left: 4px solid #2196f3;
+        margin: 10px 0;
+      }
+
+      .keyboard-shortcuts {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 15px;
+        font-size: 14px;
+      }
+
+      .shortcut {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .key {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        padding: 4px 8px;
+        font-family: monospace;
+        font-weight: bold;
+      }
+
+      .loading {
+        text-align: center;
+        padding: 40px;
+        color: #6c757d;
+      }
+
+      .error {
+        background: #f8d7da;
+        color: #721c24;
+        padding: 15px;
+        border-radius: 6px;
+        margin: 10px 0;
+      }
+
+      .success {
+        background: #d4edda;
+        color: #155724;
+        padding: 15px;
+        border-radius: 6px;
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🌊 Sea Horizon Labeling Tool</h1>
+        <p>
+          Click on the image to mark the horizon line, then press 'h' to confirm
+          or 's' to skip
+        </p>
+      </div>
+
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-number" id="total">-</div>
+          <div class="stat-label">Total</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="labeled">-</div>
+          <div class="stat-label">Labeled</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="with-horizon">-</div>
+          <div class="stat-label">With Horizon</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="bad-images">-</div>
+          <div class="stat-label">Bad Images</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="to-label">-</div>
+          <div class="stat-label">To Label</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="progress">-</div>
+          <div class="stat-label">Progress %</div>
+        </div>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+      </div>
+
+      <div class="image-container" id="image-container">
+        <div class="loading">Loading next image...</div>
+      </div>
+
+      <div class="controls">
+        <button class="btn btn-primary" onclick="confirmHorizon()">
+          Confirm Horizon (H)
+        </button>
+        <button class="btn btn-secondary" onclick="skipImage()">
+          Skip Image (S)
+        </button>
+        <button class="btn btn-warning" onclick="undoLastLabel()">
+          Undo (U)
+        </button>
+        <button class="btn btn-danger" onclick="reloadImage()">
+          Reload (R)
+        </button>
+      </div>
+
+      <div class="keyboard-shortcuts">
+        <div class="shortcut">
+          <span class="key">H</span>
+          <span>Confirm horizon and next</span>
+        </div>
+        <div class="shortcut">
+          <span class="key">S</span>
+          <span>Skip (no horizon) and next</span>
+        </div>
+        <div class="shortcut">
+          <span class="key">U</span>
+          <span>Undo last label</span>
+        </div>
+        <div class="shortcut">
+          <span class="key">R</span>
+          <span>Reload current image</span>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let currentImage = null;
+      let horizonY = null;
+      let imageElement = null;
+      let horizonLine = null;
+      let horizonMarker = null;
+
+      // Load stats
+      async function loadStats() {
+        try {
+          const response = await fetch('/api/stats');
+          const stats = await response.json();
+
+          document.getElementById('total').textContent = stats.total;
+          document.getElementById('labeled').textContent = stats.labeled;
+          document.getElementById('with-horizon').textContent =
+            stats.with_horizon;
+          document.getElementById('bad-images').textContent = stats.bad_images;
+          document.getElementById('to-label').textContent = stats.to_label;
+          document.getElementById('progress').textContent =
+            stats.progress + '%';
+          document.getElementById('progress-fill').style.width =
+            stats.progress + '%';
+        } catch (error) {
+          console.error('Error loading stats:', error);
+        }
+      }
+
+      // Load next image
+      async function loadNextImage() {
+        try {
+          const response = await fetch('/api/next-image');
+          const data = await response.json();
+
+          if (data.message) {
+            document.getElementById(
+              'image-container'
+            ).innerHTML = `<div class="success">🎉 ${data.message}</div>`;
+            return;
+          }
+
+          currentImage = data.image;
+          displayImage(currentImage);
+          loadStats();
+        } catch (error) {
+          console.error('Error loading image:', error);
+          document.getElementById(
+            'image-container'
+          ).innerHTML = `<div class="error">Error loading image: ${error.message}</div>`;
+        }
+      }
+
+      // Display image
+      function displayImage(image) {
+        const container = document.getElementById('image-container');
+
+        container.innerHTML = `
+                 <div class="image-wrapper" id="image-wrapper">
+                     <img src="${image.url}" alt="Sea horizon image" class="image" id="image">
+                     <div class="horizon-line" id="horizon-line" style="display: none;"></div>
+                     <div class="horizon-marker" id="horizon-marker" style="display: none;"></div>
+                 </div>
+             `;
+
+        imageElement = document.getElementById('image');
+        horizonLine = document.getElementById('horizon-line');
+        horizonMarker = document.getElementById('horizon-marker');
+
+        // Add click and mouse move events
+        const wrapper = document.getElementById('image-wrapper');
+        wrapper.addEventListener('click', handleImageClick);
+        wrapper.addEventListener('mousemove', handleImageMouseMove);
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', handleKeyPress);
+
+        // If this is a previously labeled image (from undo), show the existing horizon
+        if (image.horizon_y !== null && image.horizon_y !== undefined) {
+          horizonY = image.horizon_y;
+          const imageHeight = imageElement.offsetHeight;
+          const markerY = horizonY * imageHeight;
+          horizonLine.style.top = markerY + 'px';
+          horizonMarker.style.top = markerY + 'px';
+          horizonLine.style.display = 'block';
+          horizonMarker.style.display = 'block';
+        }
+      }
+
+      // Handle image click and mouse move
+      function handleImageClick(event) {
+        updateHorizonPosition(event);
+      }
+
+      function handleImageMouseMove(event) {
+        updateHorizonPosition(event);
+      }
+
+      function updateHorizonPosition(event) {
+        const rect = imageElement.getBoundingClientRect();
+        const mouseY = event.clientY - rect.top;
+        const imageHeight = rect.height;
+
+        // Normalize Y position (0-1)
+        horizonY = Math.max(0, Math.min(1, mouseY / imageHeight));
+
+        // Update visual markers
+        const markerY = horizonY * imageHeight;
+        horizonLine.style.top = markerY + 'px';
+        horizonMarker.style.top = markerY + 'px';
+        horizonLine.style.display = 'block';
+        horizonMarker.style.display = 'block';
+      }
+
+      // Handle keyboard shortcuts
+      function handleKeyPress(event) {
+        switch (event.key.toLowerCase()) {
+          case 'h':
+            event.preventDefault();
+            confirmHorizon();
+            break;
+          case 's':
+            event.preventDefault();
+            skipImage();
+            break;
+          case 'u':
+            event.preventDefault();
+            undoLastLabel();
+            break;
+          case 'r':
+            event.preventDefault();
+            reloadImage();
+            break;
+        }
+      }
+
+      // Confirm horizon
+      async function confirmHorizon() {
+        if (!currentImage) return;
+
+        try {
+          const response = await fetch('/api/label', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              image_id: currentImage.id,
+              horizon_y: horizonY,
+              is_labeled: true,
+            }),
+          });
+
+          if (response.ok) {
+            loadNextImage();
+          } else {
+            throw new Error('Failed to save label');
+          }
+        } catch (error) {
+          console.error('Error saving label:', error);
+          alert('Error saving label: ' + error.message);
+        }
+      }
+
+      // Skip image
+      async function skipImage() {
+        if (!currentImage) return;
+
+        try {
+          const response = await fetch('/api/label', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              image_id: currentImage.id,
+              horizon_y: null,
+              is_labeled: true,
+            }),
+          });
+
+          if (response.ok) {
+            loadNextImage();
+          } else {
+            throw new Error('Failed to skip image');
+          }
+        } catch (error) {
+          console.error('Error skipping image:', error);
+          alert('Error skipping image: ' + error.message);
+        }
+      }
+
+      // Reload image
+      function reloadImage() {
+        if (currentImage) {
+          horizonY = null;
+          if (horizonLine) horizonLine.style.display = 'none';
+          if (horizonMarker) horizonMarker.style.display = 'none';
+        }
+      }
+
+      // Undo last label
+      async function undoLastLabel() {
+        try {
+          const response = await fetch('/api/undo');
+          const data = await response.json();
+
+          if (data.message) {
+            alert(data.message);
+            return;
+          }
+
+          currentImage = data.image;
+          displayImage(currentImage);
+          loadStats();
+        } catch (error) {
+          console.error('Error undoing last label:', error);
+          alert('Error undoing last label: ' + error.message);
+        }
+      }
+
+      // Initialize
+      document.addEventListener('DOMContentLoaded', function () {
+        loadStats();
+        loadNextImage();
+      });
+    </script>
+  </body>
+</html>

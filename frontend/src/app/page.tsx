@@ -26,7 +26,7 @@ export default function Home() {
       }}
     >
       {/* h1 positioned at bottom */}
-      <nav className="fixed bottom-0 left-0 z-10 flex w-full items-center justify-between border-t-[1px] border-t-neutral-300 bg-white px-4 py-1">
+      <nav className="fixed bottom-0 left-0 z-10 flex w-full items-center justify-between border-t-[1px] border-t-neutral-300 bg-white/60 px-4 py-1">
         <h1 className="text-lg tracking-tight">horizon at sea</h1>
         <p className="hidden text-sm text-neutral-500 sm:block">
           all {IMAGES.length} horizon at sea shots sourced from{" "}

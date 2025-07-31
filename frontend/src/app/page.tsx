@@ -51,7 +51,7 @@ export default function Home() {
       <div className="flex min-h-screen flex-col items-center justify-center">
         <div className="flex w-full justify-start">
           <div className="flex min-h-screen items-center overflow-x-auto pb-4">
-            {IMAGES.slice(0, 400).map((image, index) => (
+            {IMAGES.slice(0, 1000).map((image, index) => (
               <DeskSetupImage key={image.id} imageWithUser={image} />
             ))}
           </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 
 import { IMAGES_WITH_USERS } from "@/data/imageWithUser";
 import { env } from "@/env";
@@ -9,11 +10,32 @@ import DeskSetupImage from "./_components/DeskSetupImage";
 import { getHue } from "@/lib/colorUtils";
 
 export default function Home() {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
   const IMAGES = [...IMAGES_WITH_USERS].sort((a, b) => {
-    const aHue = getHue(a.color);
-    const bHue = getHue(b.color);
-    return bHue - aHue;
+    // const aHue = getHue(a.color);
+    // const bHue = getHue(b.color);
+    // return bHue - aHue;
+    return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
   });
+
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+    if (!scrollContainer) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      // Add a multiplier for smoother scrolling and better responsiveness
+      const scrollMultiplier = 1.5;
+      scrollContainer.scrollLeft += e.deltaY * scrollMultiplier;
+    };
+
+    scrollContainer.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => {
+      scrollContainer.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
 
   return (
     <main
@@ -50,9 +72,23 @@ export default function Home() {
       {/* Main content */}
       <div className="flex min-h-screen flex-col items-center justify-center">
         <div className="flex w-full justify-start">
-          <div className="flex min-h-screen items-center overflow-x-auto pb-4">
+          <div
+            className="flex min-h-screen items-center overflow-x-auto pb-4"
+            ref={scrollContainerRef}
+          >
             {IMAGES.map((image, index) => (
-              <DeskSetupImage key={image.id} imageWithUser={image} />
+              <div className="relative" key={image.id}>
+                <DeskSetupImage imageWithUser={image} />
+                <div className="absolute top-0 right-0 bottom-0 left-0 flex translate-y-[400px] items-center justify-center">
+                  <span className="text-sm text-white/40 transition-all duration-300 select-none hover:text-white">
+                    {new Date(image.created_at).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </span>
+                </div>
+              </div>
             ))}
           </div>
         </div>

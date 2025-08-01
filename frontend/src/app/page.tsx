@@ -30,10 +30,53 @@ export default function Home() {
       scrollContainer.scrollLeft += e.deltaY * scrollMultiplier;
     };
 
+    // Touch event handlers for mobile
+    let isScrolling = false;
+    let startX = 0;
+    let startY = 0;
+    let scrollLeft = 0;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 0 || !e.touches[0]) return;
+      isScrolling = true;
+      startX = e.touches[0].pageX - scrollContainer.offsetLeft;
+      startY = e.touches[0].pageY;
+      scrollLeft = scrollContainer.scrollLeft;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isScrolling || e.touches.length === 0 || !e.touches[0]) return;
+
+      e.preventDefault();
+      const x = e.touches[0].pageX - scrollContainer.offsetLeft;
+      const y = e.touches[0].pageY;
+      const walkX = (x - startX) * 2; // Scroll speed multiplier
+      const walkY = Math.abs(y - startY);
+
+      // Only scroll horizontally if the horizontal movement is greater than vertical
+      if (Math.abs(walkX) > walkY) {
+        scrollContainer.scrollLeft = scrollLeft - walkX;
+      }
+    };
+
+    const handleTouchEnd = () => {
+      isScrolling = false;
+    };
+
     scrollContainer.addEventListener("wheel", handleWheel, { passive: false });
+    scrollContainer.addEventListener("touchstart", handleTouchStart, {
+      passive: false,
+    });
+    scrollContainer.addEventListener("touchmove", handleTouchMove, {
+      passive: false,
+    });
+    scrollContainer.addEventListener("touchend", handleTouchEnd);
 
     return () => {
       scrollContainer.removeEventListener("wheel", handleWheel);
+      scrollContainer.removeEventListener("touchstart", handleTouchStart);
+      scrollContainer.removeEventListener("touchmove", handleTouchMove);
+      scrollContainer.removeEventListener("touchend", handleTouchEnd);
     };
   }, []);
 
@@ -79,7 +122,7 @@ export default function Home() {
             {IMAGES.map((image, index) => (
               <div className="relative" key={image.id}>
                 <DeskSetupImage imageWithUser={image} />
-                <div className="absolute top-0 right-0 bottom-0 left-0 flex translate-y-[400px] items-center justify-center">
+                {/* <div className="absolute top-0 right-0 bottom-0 left-0 flex translate-y-[400px] items-center justify-center">
                   <span className="text-sm text-white/40 transition-all duration-300 select-none hover:text-white">
                     {new Date(image.created_at).toLocaleDateString("en-US", {
                       year: "numeric",
@@ -87,7 +130,7 @@ export default function Home() {
                       day: "numeric",
                     })}
                   </span>
-                </div>
+                </div> */}
               </div>
             ))}
           </div>

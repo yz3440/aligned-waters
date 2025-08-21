@@ -27,7 +27,7 @@ export default function DeskSetupImage({
 
   return (
     <div
-      className={cn("relative ml-4", withFrame ? "p-8 shadow-sm md:p-12" : "")}
+      className={cn("relative ml-0", withFrame ? "p-8 shadow-sm md:p-12" : "")}
     >
       {/* Rotating background layer */}
       {withFrame && (

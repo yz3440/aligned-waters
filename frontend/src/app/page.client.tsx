@@ -68,7 +68,7 @@ export default function HomeClient() {
     >
       {/* h1 positioned at bottom */}
       {/* <nav className="fixed bottom-0 left-0 z-10 flex w-full items-center justify-between border-t-[1px] border-t-neutral-300 bg-[#82aecc] px-4 py-1">
-        <h1 className="text-lg tracking-tight">horizon at sea</h1>
+        <h1 className="text-lg tracking-tight">aligned waters</h1>
         <p className="hidden text-sm text-neutral-800 sm:block">
           a chronology of {IMAGES.length} horizons at sea, sourced from{" "}
           <Link

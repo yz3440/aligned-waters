@@ -4,8 +4,8 @@ import { type Metadata } from "next";
 import { Host_Grotesk, Cedarville_Cursive } from "next/font/google";
 
 export const metadata: Metadata = {
-  title: "horizon at sea",
-  description: "horizon at sea",
+  title: "aligned waters",
+  description: "aligned waters",
   icons: [
     {
       rel: "icon",
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
         url: "/og.jpg",
         width: 1200,
         height: 630,
-        alt: "Horizon at Sea Collection",
+        alt: "Aligned Waters Collection",
       },
     ],
   },

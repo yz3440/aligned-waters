@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 import { IMAGES_WITH_USERS } from "@/data/imageWithUser";
@@ -10,13 +10,23 @@ import DeskSetupImage from "./_components/DeskSetupImage";
 export default function HomeClient() {
   const searchParams = useSearchParams();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [isSafari, setIsSafari] = useState(false);
 
-  const IMAGES = [...IMAGES_WITH_USERS].sort((a, b) => {
+  const all_images = [...IMAGES_WITH_USERS].sort((a, b) => {
     // const aHue = getHue(a.color);
     // const bHue = getHue(b.color);
     // return bHue - aHue;
     return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
   });
+
+  const IMAGES = all_images;
+
+  // Detect Safari browser
+  useEffect(() => {
+    const userAgent = navigator.userAgent;
+    const isSafariBrowser = /^((?!chrome|android).)*safari/i.test(userAgent);
+    setIsSafari(isSafariBrowser);
+  }, []);
 
   useEffect(() => {
     const autoScrollSpeed = searchParams.get("autoScrollSpeed");
@@ -89,29 +99,38 @@ export default function HomeClient() {
       </nav> */}
 
       {/* Main content */}
-      <div className="flex min-h-screen flex-col items-center justify-center">
-        <div className="flex w-full justify-start">
-          <div
-            ref={scrollContainerRef}
-            className="flex min-h-screen items-center overflow-x-auto pb-4"
-          >
-            {IMAGES.map((image, _index) => (
-              <div className="relative" key={image.id}>
-                <DeskSetupImage imageWithUser={image} />
-                {/* <div className="absolute top-0 right-0 bottom-0 left-0 flex translate-y-[400px] items-center justify-center">
-                  <span className="text-sm text-white/40 transition-all duration-300 select-none hover:text-white">
-                    {new Date(image.created_at).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </span>
-                </div> */}
-              </div>
-            ))}
+      {!isSafari && (
+        <div className="flex min-h-screen flex-col items-center justify-center">
+          <div className="flex w-full justify-start">
+            <div
+              ref={scrollContainerRef}
+              className="flex min-h-screen items-center overflow-x-auto pb-4"
+            >
+              {IMAGES.map((image, _index) => (
+                <div className="relative" key={image.id}>
+                  <DeskSetupImage imageWithUser={image} />
+                  {/* <div className="absolute top-0 right-0 bottom-0 left-0 flex translate-y-[400px] items-center justify-center">
+                    <span className="text-sm text-white/40 transition-all duration-300 select-none hover:text-white">
+                      {new Date(image.created_at).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                    </span>
+                  </div> */}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {isSafari && (
+        <div className="flex min-h-screen flex-col items-center justify-center">
+          <h1 className="text-2xl font-bold">Safari is not supported</h1>
+          <p className="">Please use a different browser to view this page.</p>
+        </div>
+      )}
     </main>
   );
 }

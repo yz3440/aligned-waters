@@ -128,6 +128,9 @@ export default function HomeClient() {
       {isSafari && (
         <div className="flex min-h-screen flex-col items-center justify-center">
           <h1 className="text-2xl font-bold">Safari is not supported</h1>
+          <p className="">
+            Sorry! These images are not displayed correctly in Safari.
+          </p>
           <p className="">Please use a different browser to view this page.</p>
         </div>
       )}

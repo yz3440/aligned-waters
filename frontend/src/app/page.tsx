@@ -13,7 +13,7 @@ export default function Home() {
         backgroundPosition: "center",
       }}
     >
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<div></div>}>
         <HomeClient />
       </Suspense>
     </main>

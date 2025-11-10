@@ -4,17 +4,22 @@ A typological study of 'seascape' photographs from Unsplash. Horizons in each im
 
 [Aligned Waters](https://aligned-waters.yufeng.place) collects 'seascape' photographs from Unsplash and presents them as a scrollable image collection.
 
-![Aligned Waters installation at Clive Davis Gallery](./assets/aligned-water-doc-sm-compressed.mp4)
+<video width="100%" autoplay muted loop>
+  <source src="./assets/aligned-water-doc-sm-compressed.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
 _Aligned Waters installation at Clive Davis Gallery_
 
 ## Process
 
 From 5,111 search results for "sea horizon", I picked 3,152 images with a clear horizon line on both sides, and manually labeled the y-coordinate of the horizon line in each image.
 
-| Unsplash Search Results                                                    | Horizon Labeling Tool                                |
-| -------------------------------------------------------------------------- | ---------------------------------------------------- |
-| ![Unsplash search results for 'sea horizon'](./assets/unsplash-search.png) | ![Horizon Labeling Tool](./assets/labeling-tool.png) |
-| _Unsplash search results for 'sea horizon'_                                | _Horizon Labeling Tool_                              |
+![Unsplash search results for 'sea horizon'](./assets/unsplash-search.png)
+_Unsplash search results for 'sea horizon'_
+
+![Horizon Labeling Tool](./assets/labeling-tool.png)
+_Horizon Labeling Tool_
 
 I built a custom web-based horizon labeling tool to label the horizon lines. The process takes about 2 hours.
 
@@ -28,10 +33,11 @@ _Panorama of aligned waters_
 
 In the image set, the earliest image dates back to 2016.
 
-| 2016 Detail                                                            | 2025 Detail                                                            |
-| ---------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| ![Details of a seascape image taken in 2016](./assets/detail-2016.png) | ![Details of a seascape image taken in 2025](./assets/detail-2025.png) |
-| _Details of a seascape image taken in 2016_                            | _Details of a seascape image taken in 2025_                            |
+![Details of a seascape image taken in 2016](./assets/detail-2016.png)
+_Details of a seascape image taken in 2016_
+
+![Details of a seascape image taken in 2025](./assets/detail-2025.png)
+_Details of a seascape image taken in 2025_
 
 For the installation, the scrolling is controlled by a knob.
 
@@ -40,10 +46,11 @@ _Aligned Waters installation in motion_
 
 ## Exhibition
 
-| Installation View                                                                            | Gallery Context                                                                   |
-| -------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| ![Aligned Waters installation at Clive Davis Gallery](./assets/20250907_DSCF8722_2000px.jpg) | ![Toolish Behavior at Clive Davis Gallery](./assets/20250906_DSCF8681_2000px.jpg) |
-| _Aligned Waters installation at Clive Davis Gallery_                                         | _Toolish Behavior at Clive Davis Gallery_                                         |
+![Aligned Waters installation at Clive Davis Gallery](./assets/20250907_DSCF8722_2000px.jpg)
+_Aligned Waters installation at Clive Davis Gallery_
+
+![Toolish Behavior at Clive Davis Gallery](./assets/20250906_DSCF8681_2000px.jpg)
+_Toolish Behavior at Clive Davis Gallery_
 
 **2025** - [Toolish Behavior](https://www.instagram.com/p/DOXHk7KDNG5). Group exhibition at [Clive Davis Gallery](https://tisch.nyu.edu/clivedavisgallery.html), Brooklyn, NY.
 

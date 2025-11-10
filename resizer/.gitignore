@@ -108,7 +108,7 @@ tmp/
 temp/
 
 # Archives
-*.zip
+# *.zip
 *.tar
 *.tar.gz
 *.rar

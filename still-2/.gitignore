@@ -1,0 +1,15 @@
+# uv / Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.python-version
+
+# Generated mosaics (run `uv run spiral` to produce)
+output/
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/

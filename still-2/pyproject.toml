@@ -1,0 +1,20 @@
+[project]
+name = "still-2"
+version = "0.1.0"
+description = "Arrange horizon-aligned seascapes along an Archimedean spiral"
+readme = "README.md"
+authors = [
+    { name = "Yufeng Zhao", email = "yufeng-zhao@outlook.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "Pillow>=10.0",
+    "tqdm>=4.66",
+]
+
+[project.scripts]
+spiral = "still_2.main:main"
+
+[build-system]
+requires = ["uv_build>=0.10.10,<0.11.0"]
+build-backend = "uv_build"

@@ -1,0 +1,15 @@
+# uv / Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.python-version
+
+# Generated composites and grids (run `uv run averaging-photos` to produce)
+output/
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/

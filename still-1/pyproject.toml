@@ -1,0 +1,24 @@
+[project]
+name = "still-1"
+version = "0.1.0"
+description = "Averaged composite images from Aligned Waters seascape dataset"
+readme = "README.md"
+authors = [
+    { name = "Yufeng Zhao", email = "yufeng-zhao@outlook.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=1.26",
+    "Pillow>=10.0",
+    "tqdm>=4.66",
+    "tifffile>=2024.1",
+]
+
+[project.scripts]
+averaging-photos = "still_1.main:main"
+averaging-credits = "still_1.credits:main"
+averaging-grid = "still_1.grid:main"
+
+[build-system]
+requires = ["uv_build>=0.10.10,<0.11.0"]
+build-backend = "uv_build"

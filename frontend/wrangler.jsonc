@@ -1,7 +1,10 @@
 {
   "name": "aligned-waters",
   "compatibility_date": "2026-07-30",
-  // Cloudflare Pages config. `next build` with `output: "export"` writes the
-  // static site here; Pages serves it and uses out/404.html for misses.
-  "pages_build_output_dir": "./out"
+  // Workers Static Assets. `vite build` writes the static site to ./out;
+  // misses are served out/404.html.
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page"
+  }
 }

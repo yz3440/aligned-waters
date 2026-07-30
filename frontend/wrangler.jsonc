@@ -1,0 +1,9 @@
+{
+  "name": "aligned-waters",
+  "compatibility_date": "2026-07-30",
+  "assets": {
+    // `next build` with `output: "export"` writes the static site here.
+    "directory": "./out",
+    "not_found_handling": "404-page"
+  }
+}

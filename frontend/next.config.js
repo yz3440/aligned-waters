@@ -5,6 +5,12 @@
 import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+  // Emit a fully static site to ./out — the whole app renders client-side, so
+  // there is nothing to run on a server. Deployed to Cloudflare as static assets.
+  output: "export",
+  // Required by `output: "export"`; every <Image> already passes `unoptimized`.
+  images: { unoptimized: true },
+};
 
 export default config;

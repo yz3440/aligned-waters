@@ -1,15 +1,11 @@
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import { type ImageWithUser } from "@/data/imageWithUser";
-import Image from "next/image";
-import Link from "next/link";
+import { type ImageWithUser } from "@/types";
 import { useMemo } from "react";
 
 interface DeskSetupImageDialogProps {
@@ -30,8 +26,8 @@ export function DeskSetupImageDialog({
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent
-        showCloseButton={false}
         className="overflow-hidden p-8 pb-6"
+        aria-describedby={undefined}
       >
         <DialogTitle className="sr-only">
           {imageWithUser.alt_description}
@@ -47,8 +43,12 @@ export function DeskSetupImageDialog({
             transformOrigin: "center",
           }}
         />
-        <Link href={imageWithUser.html_link} target="_blank">
-          <Image
+        <a
+          href={imageWithUser.html_link}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
             src={imageWithUser.regular_image_src}
             alt={
               imageWithUser.description ?? imageWithUser.alt_description ?? ""
@@ -64,9 +64,8 @@ export function DeskSetupImageDialog({
             loading="lazy"
             height={500}
             width={625}
-            unoptimized
           />
-        </Link>
+        </a>
 
         <div className="mt-0">
           <p className="text-sm italic">
@@ -75,13 +74,14 @@ export function DeskSetupImageDialog({
           </p>
 
           <p className="text-muted-foreground font-cursive text-right text-sm">
-            <Link
+            <a
               href={imageWithUser.user.html_link}
               target="_blank"
+              rel="noopener noreferrer"
               className="underline"
             >
               {imageWithUser.user.name}
-            </Link>
+            </a>
           </p>
 
           <p className="text-muted-foreground text-right text-xs">

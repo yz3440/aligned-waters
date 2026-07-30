@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "tw-animate-css";
 
 /* Self-hosted fonts (subsets + metric-override fallbacks carried over from
    the previous next/font build, so rendering and CLS stay identical). */
@@ -92,5 +91,44 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  }
+}
+
+/* Native <dialog> enter/exit. `allow-discrete` keeps the element displayed and
+   in the top layer while the exit transition runs; @starting-style supplies the
+   pre-open values so the enter transition has something to animate from. */
+[data-slot="dialog"] {
+  opacity: 0;
+  transform: scale(0.95);
+  transition:
+    opacity 200ms ease,
+    transform 200ms ease,
+    display 200ms allow-discrete,
+    overlay 200ms allow-discrete;
+}
+[data-slot="dialog"][open] {
+  opacity: 1;
+  transform: scale(1);
+}
+@starting-style {
+  [data-slot="dialog"][open] {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+[data-slot="dialog"]::backdrop {
+  background-color: rgb(255 255 255 / 0);
+  transition:
+    background-color 200ms ease,
+    display 200ms allow-discrete,
+    overlay 200ms allow-discrete;
+}
+[data-slot="dialog"][open]::backdrop {
+  background-color: rgb(255 255 255 / 0.4);
+}
+@starting-style {
+  [data-slot="dialog"][open]::backdrop {
+    background-color: rgb(255 255 255 / 0);
   }
 }

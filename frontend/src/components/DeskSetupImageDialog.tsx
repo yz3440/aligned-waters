@@ -1,9 +1,4 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog } from "@/components/ui/dialog";
 
 import { type ImageWithUser } from "@/types";
 import { useMemo } from "react";
@@ -23,76 +18,65 @@ export function DeskSetupImageDialog({
   }, []);
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent
-        className="overflow-hidden p-8 pb-6"
-        aria-describedby={undefined}
-      >
-        <DialogTitle className="sr-only">
-          {imageWithUser.alt_description}
-        </DialogTitle>
-        <div
-          className="absolute inset-0 -z-10"
+    <Dialog
+      trigger={children}
+      label={imageWithUser.alt_description ?? "image"}
+      className="relative overflow-hidden p-8 pb-6"
+    >
+      <div
+        className="absolute inset-0 -z-10"
+        style={{
+          backgroundImage: "url(/231-subtle-white-paper.webp)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          transform: `rotate(${randomRotation}deg) scale(2)`,
+          transformOrigin: "center",
+        }}
+      />
+      <a href={imageWithUser.html_link} target="_blank" rel="noopener noreferrer">
+        <img
+          src={imageWithUser.regular_image_src}
+          alt={imageWithUser.description ?? imageWithUser.alt_description ?? ""}
+          className="h-full w-full object-cover transition-opacity duration-300 select-none"
           style={{
-            backgroundImage: "url(/231-subtle-white-paper.webp)",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            transform: `rotate(${randomRotation}deg) scale(2)`,
-            transformOrigin: "center",
+            // 4 thin borders: top (light), right (medium), bottom (dark), left (medium-light)
+            borderTop: "2px solid #ccc", // top: white highlight
+            borderRight: "2px solid #e5e7eb", // right: light gray
+            borderBottom: "2px solid #acacac", // bottom: dark gray
+            borderLeft: "2px solid #d1d5db", // left: medium gray
           }}
+          loading="lazy"
+          height={500}
+          width={625}
         />
-        <a
-          href={imageWithUser.html_link}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img
-            src={imageWithUser.regular_image_src}
-            alt={
-              imageWithUser.description ?? imageWithUser.alt_description ?? ""
-            }
-            className="h-full w-full object-cover transition-opacity duration-300 select-none"
-            style={{
-              // 4 thin borders: top (light), right (medium), bottom (dark), left (medium-light)
-              borderTop: "2px solid #ccc", // top: white highlight
-              borderRight: "2px solid #e5e7eb", // right: light gray
-              borderBottom: "2px solid #acacac", // bottom: dark gray
-              borderLeft: "2px solid #d1d5db", // left: medium gray
-            }}
-            loading="lazy"
-            height={500}
-            width={625}
-          />
-        </a>
+      </a>
 
-        <div className="mt-0">
-          <p className="text-sm italic">
-            &quot;{imageWithUser.description ?? imageWithUser.alt_description}
-            &quot;
-          </p>
+      <div className="mt-0">
+        <p className="text-sm italic">
+          &quot;{imageWithUser.description ?? imageWithUser.alt_description}
+          &quot;
+        </p>
 
-          <p className="text-muted-foreground font-cursive text-right text-sm">
-            <a
-              href={imageWithUser.user.html_link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline"
-            >
-              {imageWithUser.user.name}
-            </a>
-          </p>
+        <p className="text-muted-foreground font-cursive text-right text-sm">
+          <a
+            href={imageWithUser.user.html_link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline"
+          >
+            {imageWithUser.user.name}
+          </a>
+        </p>
 
-          <p className="text-muted-foreground text-right text-xs">
-            {new Date(imageWithUser.created_at).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </p>
-        </div>
-      </DialogContent>
+        <p className="text-muted-foreground text-right text-xs">
+          {new Date(imageWithUser.created_at).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </p>
+      </div>
     </Dialog>
   );
 }
